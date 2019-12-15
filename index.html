@@ -12,7 +12,31 @@
             $(document).ready(function(){
                 $('.tabs').tabs();
                 $('.modal').modal();
-                
+
+                $("#shaxx_search").on("input", async () => {
+                    let inputId = "#shaxx_search";
+                    let input = $(inputId).val();
+                    search(inputId, input)
+                })
+
+                $("#saladin_search").on("input", async () => {
+                    let inputId = "#saladin_search";
+                    let input = $(inputId).val();
+                    search(inputId, input)
+                })
+
+                $("#calus_search").on("input", async () => {
+                    let inputId = "#calus_search";
+                    let input = $(inputId).val();
+                    search(inputId, input)
+                })
+
+                $("#cayde_search").on("input", async () => {
+                    let inputId = "#cayde_search";
+                    let input = $(inputId).val();
+                    search(inputId, input)
+                })
+
                 function inputChanged(inputId) {
                     return new Promise((resolve, reject) => {
                         let input = $(inputId).val();
@@ -22,10 +46,8 @@
                         }, 250);
                     })
                 }
-
-                $("#shaxx_search").on("input", async () => {
-                    let inputId = "#shaxx_search";
-                    let input = $(inputId).val();
+                
+                async function search(inputId, input) {
                     try {
                         await inputChanged(inputId);
                         if (input === "") {
@@ -43,51 +65,7 @@
                     } catch (e) {
                         return;
                     }
-                })
-
-                $("#saladin_search").on("input", async () => {
-                    let inputId = "#saladin_search";
-                    let input = $(inputId).val();
-                    try {
-                        await inputChanged(inputId);
-                        if (input === "") {
-                            console.log("ok")
-                            for (let i = 0; i < $(".sound-btn").length; i++) {
-                                let btn = $(".sound-btn")[i];
-                                btn.style.display = "";
-                            }
-                            return;
-                        }
-                        for (let i = 0; i < $(".sound-btn").length; i++) {
-                            let btn = $(".sound-btn")[i];
-                            if (!btn.innerText.toLowerCase().includes(input.toLowerCase())) btn.style.display = "none";
-                        }
-                    } catch (e) {
-                        return;
-                    }
-                })
-
-                $("#calus_search").on("input", async () => {
-                    let inputId = "#calus_search";
-                    let input = $(inputId).val();
-                    try {
-                        await inputChanged(inputId);
-                        if (input === "") {
-                            console.log("ok")
-                            for (let i = 0; i < $(".sound-btn").length; i++) {
-                                let btn = $(".sound-btn")[i];
-                                btn.style.display = "";
-                            }
-                            return;
-                        }
-                        for (let i = 0; i < $(".sound-btn").length; i++) {
-                            let btn = $(".sound-btn")[i];
-                            if (!btn.innerText.toLowerCase().includes(input.toLowerCase())) btn.style.display = "none";
-                        }
-                    } catch (e) {
-                        return;
-                    }
-                })
+                }
             });
         </script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -153,9 +131,10 @@
 
             <div class="col s12">
               <ul class="tabs bungie-grey">
-                <li class="tab col s4"><a href="#shaxx" class="active bungie-yellow waves-yellow">Shaxx</a></li>
-                <li class="tab col s4"><a class="active" href="#saladin">Saladin</a></li>
-                <li class="tab col s4"><a class="active bungie-purple waves-purple" href="#calus">Calus</a></li>
+                <li class="tab col s3"><a href="#shaxx" class="active bungie-yellow waves-yellow">Shaxx</a></li>
+                <li class="tab col s3"><a class="active" href="#saladin">Saladin</a></li>
+                <li class="tab col s3"><a class="active bungie-purple waves-purple" href="#calus">Calus</a></li>
+                <li class="tab col s3"><a class="active bungie-yellow" href="#cayde">Cayde-6</a></li>
               </ul>
             </div>
 
@@ -185,6 +164,15 @@
                 </div>                
                 <h3 id="calus-loading" class="white-text">Loading...</h3>
             </div>
+
+            <div id="cayde" class="col s12 bungie-yellow">
+                <h3>Cayde-6</h3>
+                <div class="input-field col s12">
+                    <i class="material-icons prefix" style="color: white;">search</i>
+                    <input id="cayde_search" class="js-search" type="text" style="width: 75%; color: #FAFAFA">
+                </div>                
+                <h3 id="cayde-loading" class="white-text">Loading...</h3>
+            </div>
             
           </div>
 
@@ -201,7 +189,7 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
-        const dev = false;
+        const dev = true;
         const githubApiUrl = 'https://api.github.com/repos/madmikeyb/Destiny2-Soundboard/contents';
         const destinyDictionaryBlob = 'https://api.github.com/repos/madmikeyb/Destiny2-Soundboard/git/blobs/94d4ca3cef7056a374d938608fe2a5ca0afafe7d'
         const githubRawUrl = 'https://raw.githubusercontent.com/madmikeyb/Destiny2-Soundboard/master';
@@ -342,10 +330,54 @@
             elmCalus.removeChild(document.getElementById("calus-loading"));
         }
         
+        async function cayde() {
+            const lines = !dev
+            ? JSON.parse(atob(JSON.parse(await get(githubApiUrl + "/cayde.json")).content)).lines
+            : JSON.parse(await get("http://localhost:3000/cayde.json")).lines;
+            const lines_keys = Object.keys(lines);
+            const elmCayde = document.getElementById("cayde");
 
+            const dict = !dev
+            ? JSON.parse(atob(JSON.parse(await get(destinyDictionaryBlob)).content))
+            : JSON.parse(await get("http://localhost:3000/dict.json"));
+
+            for (let i = 0; i < lines_keys.length; i++) {
+                const title = lines_keys[i]; // Title of h3 element
+                const keys = Object.keys(lines[title]);
+                const vals = Object.values(lines[title]);
+                let h3 = document.createElement("h3"); // Create h3 element
+                h3.classList.add("white-text"); // Make text white
+                let th3 = document.createTextNode(title); // Add title to h3
+                h3.appendChild(th3);
+                elmCayde.appendChild(h3);
+
+                for (let x = 0; x < keys.length; x++) {
+                    const bungieHex = keys[x];
+
+                    let elm = document.createElement("a");
+                    elm.classList.add("waves-effect", "waves-light", "btn", "sound-btn", "red", "darken-3");
+                    elm.title = dict[bungieHex];
+                    elm.setAttribute('data-hex', bungieHex);
+                    elm.setAttribute('data-tippy-content', dict[bungieHex]);
+                    let t = document.createTextNode(dict[bungieHex]);
+                    elm.appendChild(t);
+
+                    elm.onclick = function() {
+                        const audio = new Audio(!dev ? `${githubRawUrl}/ogg/cayde/${bungieHex}.mp3` : `http://localhost:3000/ogg/cayde/${bungieHex}.mp3`);
+                        audio.play(); 
+                    }
+                    elmCayde.appendChild(elm);
+                }
+            }
+
+            tippy('.sound-btn');
+
+            elmCayde.removeChild(document.getElementById("cayde-loading"));
+        }
 
         calus();
         shaxx();
         saladin();
+        cayde();
     </script>
 </html>
