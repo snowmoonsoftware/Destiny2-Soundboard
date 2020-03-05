@@ -10,5 +10,6 @@ app.get('/shaxx.json', (req, res) => res.sendFile(path.join(__dirname, "shaxx.js
 app.get('/saladin.json', (req, res) => res.sendFile(path.join(__dirname, "saladin.json")));
 app.get('/calus.json', (req, res) => res.sendFile(path.join(__dirname, "calus.json")));
 app.get('/cayde.json', (req, res) => res.sendFile(path.join(__dirname, "cayde.json")));
+app.get('/drifter.json', (req, res) => res.sendFile(path.join(__dirname, "drifter.json")));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
