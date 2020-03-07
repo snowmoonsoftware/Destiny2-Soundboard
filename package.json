@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/evilarceus/Destiny2-Soundboard#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "jshint": "^2.11.0"
   }
 }
