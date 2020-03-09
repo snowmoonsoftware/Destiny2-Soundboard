@@ -211,7 +211,7 @@
         const githubApiUrl = 'https://api.github.com/repos/snowmoonsoftware/Destiny2-Soundboard/contents';
         const destinyDictionaryBlob = 'https://api.github.com/repos/snowmoonsoftware/Destiny2-Soundboard/git/blobs/94d4ca3cef7056a374d938608fe2a5ca0afafe7d';
         const githubRawUrl = 'https://raw.githubusercontent.com/snowmoonsoftware/Destiny2-Soundboard/master';
-        var dict = null;
+        var dict = null
 
         async function get(url) {
             return new Promise((resolve, reject) => {
@@ -240,9 +240,6 @@
             const url = `/${vendor}.json`;
             const lines = dev ? JSON.parse(await get(url)).lines : JSON.parse(atob(JSON.parse(await get(githubApiUrl + url)).content)).lines;
             const lines_keys = Object.keys(lines);
-            // const dict = !dev
-            // ? JSON.parse(atob(JSON.parse(await get(destinyDictionaryBlob)).content))
-            // : JSON.parse(await get("/dict.json"));
             const dict = getDictionary();
 
 
@@ -262,7 +259,7 @@
                     let elm = document.createElement("a");
                     elm.classList.add("waves-effect", "waves-light", "btn", "sound-btn", "red", "darken-3");
                     elm.setAttribute('data-hex', bungieHex);
-                    elm.title = (dict[bungieHex] === undefined) ? vals[x] : dict[bungieHex];
+                    elm.title = value;
                     elm.setAttribute('data-tippy-content', value);
                     let t = document.createTextNode( value);
                     elm.appendChild(t);
@@ -274,13 +271,15 @@
                     parentElement.appendChild(elm);
                 }
             }
+            tippy('.sound-btn');
+            parentElement.removeChild(document.getElementById(`${vendor}-loading`));
+
         }
 
-        //shaxx();
-        buildVendorSoundboard("shaxx", true);
-        buildVendorSoundboard("calus", false);
-        buildVendorSoundboard("saladin", false);
-        buildVendorSoundboard("cayde", false);
+//        buildVendorSoundboard("shaxx", true);
+//        buildVendorSoundboard("calus", false);
+        // buildVendorSoundboard("saladin", false);
+        // buildVendorSoundboard("cayde", false);
         buildVendorSoundboard("drifter", false);
     </script>
 </html>
