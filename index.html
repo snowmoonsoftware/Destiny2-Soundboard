@@ -224,15 +224,6 @@
                 xhr.send();
             });
         }
-        async function getDictionary() {
-            dict = (dev ? JSON.parse(await get("/dict.json")) : JSON.parse(atob(JSON.parse(await get(destinyDictionaryBlob)).content)));
-        }
-
-        async function getLines(who) {
-            var data =  dev ? JSON.parse(await get(who)) : JSON.parse(atob(JSON.parse(await get(githubApiUrl + who)).content));
-
-            return data.lines;
-        }
 
 
         async function buildVendorSoundboard(vendor, skipDictionary) {
@@ -240,7 +231,7 @@
             const url = `/${vendor}.json`;
             const lines = dev ? JSON.parse(await get(url)).lines : JSON.parse(atob(JSON.parse(await get(githubApiUrl + url)).content)).lines;
             const lines_keys = Object.keys(lines);
-            const dict = getDictionary();
+            const dict = (dev ? JSON.parse(await get("/dict.json")) : JSON.parse(atob(JSON.parse(await get(destinyDictionaryBlob)).content)));
 
 
             for (let i = 0; i < lines_keys.length; i++) {
